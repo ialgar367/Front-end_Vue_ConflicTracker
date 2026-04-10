@@ -39,9 +39,9 @@ const changeLanguage = (lang: string) => {
 
 .lang-btn {
   padding: 0.5rem 1rem;
-  border: 2px solid #646cff;
+  border: 2px solid #949494;
   background: transparent;
-  color: #646cff;
+  color: #168b86;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
@@ -49,12 +49,12 @@ const changeLanguage = (lang: string) => {
 }
 
 .lang-btn:hover {
-  background: #646cff;
+  background: #0b4643;
   color: #fff;
 }
 
 .lang-btn.active {
-  background: #646cff;
+  background: #168b86;
   color: #fff;
 }
 </style>

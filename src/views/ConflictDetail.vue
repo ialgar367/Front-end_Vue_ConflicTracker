@@ -257,7 +257,7 @@ onMounted(async () => {
 }
 
 .back-button {
-  background: #646cff;
+  background: #168b86;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -269,7 +269,7 @@ onMounted(async () => {
 }
 
 .back-button:hover {
-  background: #535bf2;
+  background: #0b4643;
 }
 
 @media (max-width: 768px) {

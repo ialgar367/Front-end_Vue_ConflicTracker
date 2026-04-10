@@ -142,7 +142,7 @@ const handleClick = () => {
 }
 
 .view-details {
-  color: #7c87ff;
+  color: #168b86;
   font-size: 0.9rem;
   font-weight: 500;
 }
