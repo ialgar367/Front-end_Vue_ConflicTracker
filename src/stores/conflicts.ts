@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { API_ENDPOINTS } from '../config/api'
 
 interface Country {
   id: number
@@ -26,12 +27,13 @@ export const useConflictsStore = defineStore('conflicts', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('http://localhost:8080/api/v1/conflicts')
+      const response = await fetch(API_ENDPOINTS.CONFLICTS)
       if (!response.ok) throw new Error('Failed to fetch conflicts')
       const data = await response.json()
       conflicts.value = data
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Unknown error'
+      console.error('Error fetching conflicts:', err)
     } finally {
       loading.value = false
     }
@@ -41,11 +43,12 @@ export const useConflictsStore = defineStore('conflicts', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/conflicts/${id}`)
+      const response = await fetch(`${API_ENDPOINTS.CONFLICTS}/${id}`)
       if (!response.ok) throw new Error('Failed to fetch conflict')
       return await response.json()
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Unknown error'
+      console.error('Error fetching conflict:', err)
       return null
     } finally {
       loading.value = false
@@ -56,7 +59,7 @@ export const useConflictsStore = defineStore('conflicts', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('http://localhost:8080/api/v1/conflicts', {
+      const response = await fetch(API_ENDPOINTS.CONFLICTS, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(conflictData)
@@ -65,6 +68,7 @@ export const useConflictsStore = defineStore('conflicts', () => {
       await fetchConflicts()
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Unknown error'
+      console.error('Error creating conflict:', err)
     } finally {
       loading.value = false
     }
