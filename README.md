@@ -1,10 +1,10 @@
-# 🚀 Conflict Tracker - Aplicación Fullstack Desplegada
+# Conflict Tracker - Aplicación Fullstack Desplegada
 
 [![Frontend](https://img.shields.io/badge/Frontend-Vercel-black)](https://front-end-vue-conflic-tracker.vercel.app)
 [![Backend](https://img.shields.io/badge/Backend-Render-purple)](https://conflict-tracker-api-vuwk.onrender.com)
 [![Database](https://img.shields.io/badge/Database-Supabase-green)](https://supabase.com)
 
-## 🌐 URL Pública
+## URL Pública
 
 **Frontend:** https://front-end-vue-conflic-tracker.vercel.app
 
@@ -12,7 +12,7 @@
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -53,15 +53,17 @@
 
 ---
 
-## ⚙️ Configuración de Variables de Entorno
+## Configuración de Variables de Entorno
 
-### 🗄️ Supabase (Base de Datos)
+### Supabase (Base de Datos)
+
+**Proyecto:** https://xcopmiywvhmzayvnhilk.supabase.co
 
 1. Crear proyecto en [Supabase](https://supabase.com)
 2. Ejecutar el script de inicialización: `init-postgres.sql`
 3. Obtener credenciales desde **Settings → Database → Connection Pooling**
 
-### ⚙️ Render (Backend)
+### Render (Backend)
 
 Variables requeridas en **Environment**:
 
@@ -77,7 +79,7 @@ APP_CORS_ALLOWED_ORIGINS=https://front-end-vue-conflic-tracker.vercel.app
 - Runtime: Docker
 - Dockerfile incluido en el repositorio
 
-### 🎨 Vercel (Frontend)
+### Vercel (Frontend)
 
 Variable requerida en **Settings → Environment Variables**:
 
@@ -89,11 +91,11 @@ VITE_API_URL=https://conflict-tracker-api-vuwk.onrender.com
 
 ---
 
-## 📝 Modificaciones Realizadas
+## Modificaciones Realizadas
 
 ### BACKEND (Spring Boot)
 
-#### ❌ Error 1: Base de datos H2 en memoria (no persistente)
+#### Error 1: Base de datos H2 en memoria (no persistente)
 
 **Problema inicial:**
 ```properties
@@ -103,8 +105,8 @@ spring.datasource.url=jdbc:h2:mem:conflictdb
 Los datos se borraban al reiniciar el servidor.
 
 **Solución:**
-- ✅ Creado `application-prod.yml` con configuración PostgreSQL
-- ✅ Variables de entorno para conexión dinámica
+-  Creado `application-prod.yml` con configuración PostgreSQL
+-  Variables de entorno para conexión dinámica
 ```yaml
 datasource:
   url: ${DATABASE_URL}
@@ -119,7 +121,7 @@ datasource:
 
 ---
 
-#### ❌ Error 2: CORS con wildcard (inseguro para producción)
+#### Error 2: CORS con wildcard (inseguro para producción)
 
 **Problema inicial:**
 ```java
@@ -133,8 +135,8 @@ CORS policy blocked: wildcard not allowed with credentials
 ```
 
 **Solución:**
-- ✅ Configuración CORS centralizada en `WebConfig.java`
-- ✅ CORS específico por dominio usando variable de entorno
+-  Configuración CORS centralizada en `WebConfig.java`
+-  CORS específico por dominio usando variable de entorno
 ```java
 @Value("${app.cors.allowed-origins}")
 private String allowedOrigins;
@@ -152,7 +154,7 @@ registry.addMapping("/api/**")
 
 ---
 
-#### ❌ Error 3: Despliegue en Render detectaba Node.js
+#### Error 3: Despliegue en Render detectaba Node.js
 
 **Problema:**
 ```
@@ -162,8 +164,8 @@ java: command not found
 ```
 
 **Solución:**
-- ✅ Creado `Dockerfile` para build con Maven y runtime con Java
-- ✅ Configuración `render.yaml` con runtime Docker
+-  Creado `Dockerfile` para build con Maven y runtime con Java
+-  Configuración `render.yaml` con runtime Docker
 ```dockerfile
 FROM maven:3.9-eclipse-temurin-17 AS build
 ...
@@ -177,7 +179,7 @@ FROM eclipse-temurin:17-jre-alpine
 
 ---
 
-#### ❌ Error 4: Conexión rechazada a Supabase (IPv6 vs IPv4)
+#### Error 4: Conexión rechazada a Supabase (IPv6 vs IPv4)
 
 **Problema:**
 ```
@@ -187,15 +189,15 @@ java.net.SocketException: Network unreachable
 Render usa IPv4, pero Supabase por defecto requiere IPv6.
 
 **Solución:**
-- ✅ Usar **Session Pooler** de Supabase (compatible IPv4)
-- ✅ Actualizar host: `aws-1-eu-central-1.pooler.supabase.com`
+-  Usar **Session Pooler** de Supabase (compatible IPv4)
+-  Actualizar host: `aws-1-eu-central-1.pooler.supabase.com`
 ```env
 DATABASE_URL=jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require
 ```
 
 ---
 
-#### ❌ Error 5: Puerto no detectado por Render
+#### Error 5: Puerto no detectado por Render
 
 **Problema:**
 ```
@@ -204,11 +206,11 @@ Exited with status 1
 ```
 
 **Solución:**
-- ✅ Configurar Dockerfile para usar variable `PORT` de Render
+-  Configurar Dockerfile para usar variable `PORT` de Render
 ```dockerfile
 CMD ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar app.jar"]
 ```
-- ✅ Configuración en `application-prod.yml`:
+-  Configuración en `application-prod.yml`:
 ```yaml
 server:
   port: ${PORT:8080}
@@ -222,7 +224,7 @@ server:
 
 ### FRONTEND (Vue 3)
 
-#### ❌ Error 1: URL del API hardcodeada
+#### Error 1: URL del API hardcodeada
 
 **Problema inicial:**
 ```typescript
@@ -237,8 +239,8 @@ Failed to fetch from localhost
 ```
 
 **Solución:**
-- ✅ Configuración centralizada de API endpoints
-- ✅ Variables de entorno con Vite
+-  Configuración centralizada de API endpoints
+-  Variables de entorno con Vite
 ```typescript
 // src/config/api.ts
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
@@ -258,7 +260,7 @@ export const API_ENDPOINTS = {
 
 ---
 
-#### ❌ Error 2: Error 404 al refrescar rutas en Vercel
+#### Error 2: Error 404 al refrescar rutas en Vercel
 
 **Problema:**
 ```
@@ -271,7 +273,7 @@ Vercel busca archivo físico `/conflict/123.html` que no existe.
 Las SPAs usan client-side routing.
 
 **Solución:**
-- ✅ Creado `vercel.json` con rewrites
+-  Creado `vercel.json` con rewrites
 ```json
 {
   "rewrites": [
@@ -285,13 +287,13 @@ Las SPAs usan client-side routing.
 
 ---
 
-#### ❌ Error 3: Archivos .env versionados
+#### Error 3: Archivos .env versionados
 
 **Problema:**
 Los archivos `.env` con credenciales podían ser subidos a Git.
 
 **Solución:**
-- ✅ Actualizado `.gitignore`
+-  Actualizado `.gitignore`
 ```gitignore
 .env
 .env.local
@@ -305,9 +307,9 @@ Los archivos `.env` con credenciales podían ser subidos a Git.
 
 ---
 
-## 🧪 Verificación del Despliegue
+## Verificación del Despliegue
 
-### ✅ Checklist Completo
+### Checklist Completo
 
 **Backend:**
 - [x] Servicio "Live" en Render
@@ -330,7 +332,7 @@ Los archivos `.env` con credenciales podían ser subidos a Git.
 
 ---
 
-## 📊 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### Backend
 - Java 17
